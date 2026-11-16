@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F5F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0D26" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="طلای مینائی">
+<link rel="manifest" href="manifest.webmanifest">
+<title>دفتر طلای مینائی (تحت شبکه)</title>
+<style>
+@font-face{font-family:"Vazirmatn";font-weight:100 900;font-style:normal;font-display:swap;src:local("Vazirmatn"),local("Tahoma");}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#F4F5F9;--sf:#FFFFFF;--sf2:#ECEEF5;--sf3:#E2E5F0;--t1:#0B0E24;--t2:#53587A;--t3:#888EAE;
+  --ac:#4361EE;--ac2:#3A56D4;--acBg:rgba(67,97,238,.11);
+  --gn:#10B981;--gn2:#059669;--gnBg:rgba(16,185,129,.12);
+  --rd:#F43F5E;--rd2:#E11D48;--rdBg:rgba(244,63,94,.11);
+  --am:#F59E0B;--amBg:rgba(245,158,11,.13);
+  --bd:rgba(11,14,36,.08);--sh:0 4px 22px rgba(11,14,36,.06),0 1px 4px rgba(11,14,36,.04);
+  --nav-bg:rgba(244,245,249,.86);
+  --r:20px;--rs:13px;--f:"Vazirmatn",system-ui,-apple-system,sans-serif;
+}
+html.dark{
+  --bg:#0A0D26;--sf:#151839;--sf2:#1F234B;--sf3:#292E5E;--t1:#F1F3FA;--t2:#9499BC;--t3:#61668C;
+  --ac:#6366F1;--ac2:#818CF8;--acBg:rgba(99,102,241,.17);
+  --gn:#10B981;--gn2:#34D399;--gnBg:rgba(16,185,129,.17);
+  --rd:#F43F5E;--rd2:#FB7185;--rdBg:rgba(244,63,94,.17);
+  --am:#FBBF24;--amBg:rgba(251,191,36,.15);
+  --bd:rgba(255,255,255,.07);--sh:0 6px 26px rgba(0,0,0,.38);
+  --nav-bg:rgba(10,13,38,.86);
+}
+html{font-size:16px;background:var(--bg);color:var(--t1);font-family:var(--f);line-height:1.5;}
+body{background:var(--bg);color:var(--t1);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+button,input,select{font-family:inherit;color:inherit;border:none;outline:none;background:none;}
+button{cursor:pointer;}
+.num{font-variant-numeric:tabular-nums;direction:ltr;display:inline-block;}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px calc(92px + env(safe-area-inset-bottom));}
+
+/* صفحه ورود */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:var(--sf);width:100%;max-width:400px;padding:28px 22px;border-radius:24px;border:1px solid var(--bd);box-shadow:var(--sh);text-align:center;}
+.login-box h2{font-size:20px;font-weight:900;margin-bottom:6px;color:var(--t1);}
+.login-box p{font-size:12.5px;color:var(--t2);margin-bottom:20px;}
+
+/* هدر */
+.topbar{position:sticky;top:0;z-index:30;padding:calc(12px + env(safe-area-inset-top)) 16px 10px;background:var(--nav-bg);backdrop-filter:blur(18px);border-bottom:1px solid var(--bd);}
+.topbar-in{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-ic{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#4361EE,#6366F1);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;}
+.brand h1{font-size:16px;font-weight:800;}
+.brand span{display:block;font-size:11px;color:var(--t2);font-weight:600;}
+.top-acts{display:flex;align-items:center;gap:6px;}
+.ic-btn{width:36px;height:36px;border-radius:11px;background:var(--sf);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;color:var(--t1);}
+
+/* کارت‌ها و فرم‌ها */
+.card{background:var(--sf);border-radius:var(--r);padding:16px;border:1px solid var(--bd);box-shadow:var(--sh);margin-bottom:12px;}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin:14px 2px 9px;}
+.sec-hd h2{font-size:14px;font-weight:800;color:var(--t2);}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--sf2);color:var(--t2);}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sf2);padding:4px;border-radius:14px;gap:4px;}
+.seg button{padding:9px 8px;border-radius:11px;font-size:13.5px;font-weight:800;color:var(--t2);transition:.18s;}
+.seg button.on-buy{background:var(--gn);color:#fff;}
+.seg button.on-sell{background:var(--rd);color:#fff;}
+
+.cats{display:flex;gap:7px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none;}
+.cat{flex:0 0 auto;padding:8px 13px;border-radius:12px;background:var(--sf2);color:var(--t2);font-size:12.5px;font-weight:700;border:1.5px solid transparent;}
+.cat.on{background:var(--acBg);color:var(--ac);border-color:var(--ac);}
+
+.fg{margin-top:11px;}
+.fl{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;}
+.inp{width:100%;background:var(--sf2);border:1.5px solid transparent;border-radius:var(--rs);padding:11px 13px;font-size:15px;font-weight:700;color:var(--t1);}
+.inp:focus{border-color:var(--ac);background:var(--sf);}
+.inp-big{font-size:19px;font-weight:800;text-align:left;direction:ltr;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+
+.live-box{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--sf2);display:flex;align-items:center;justify-content:space-between;}
+.live-box .v{font-size:18px;font-weight:900;color:var(--ac);}
+
+.btn-primary{width:100%;margin-top:13px;padding:13px;border-radius:14px;background:var(--ac);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-primary.buy-mode{background:var(--gn);}
+.btn-primary.sell-mode{background:var(--rd);}
+
+/* تراز و کارت‌های دسته‌بندی */
+.hero{border-radius:22px;padding:18px;color:#fff;background:linear-gradient(135deg,#1E255E,#3A46A8);margin-bottom:12px;}
+.hero-val{font-size:26px;font-weight:900;margin-top:4px;}
+.bal-card{background:var(--sf);border-radius:var(--r);padding:15px;border:1px solid var(--bd);box-shadow:var(--sh);margin-bottom:11px;}
+.bal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.bal-name{font-size:15px;font-weight:800;}
+.badge{font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.badge-gn{background:var(--gnBg);color:var(--gn);}
+.badge-rd{background:var(--rdBg);color:var(--rd);}
+.badge-nt{background:var(--sf2);color:var(--t2);}
+.bal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;background:var(--sf2);padding:10px;border-radius:13px;}
+.bal-cell span{display:block;font-size:10.5px;color:var(--t2);}
+.bal-cell strong{font-size:13px;font-weight:800;}
+.sub-list{margin-top:10px;border-top:1px dashed var(--bd);padding-top:8px;display:flex;flex-direction:column;gap:6px;}
+.sub-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;background:var(--sf2);padding:7px 10px;border-radius:9px;}
+
+/* آیتم‌های تاریخچه */
+.tx{background:var(--sf);border-radius:17px;padding:13px 14px;border:1px solid var(--bd);margin-bottom:9px;}
+.tx-top{display:flex;justify-content:space-between;align-items:center;}
+.tx-side{font-size:11px;font-weight:800;padding:2px 8px;border-radius:7px;}
+.tx-side.b{background:var(--gnBg);color:var(--gn);}
+.tx-side.s{background:var(--rdBg);color:var(--rd);}
+.tx-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);font-size:11px;color:var(--t2);}
+.author-tag{background:var(--sf2);color:var(--t1);padding:2px 8px;border-radius:6px;font-weight:700;}
+
+/* ناوبری پایین */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:35;background:var(--nav-bg);backdrop-filter:blur(20px);border-top:1px solid var(--bd);padding:6px 12px calc(7px + env(safe-area-inset-bottom));}
+.nav-in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border-radius:13px;color:var(--t2);font-size:11px;font-weight:700;}
+.nav button.on{color:var(--ac);background:var(--acBg);}
+.page{display:none;}.page.on{display:block;}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#0B0E24;color:#fff;padding:10px 18px;border-radius:99px;font-size:13px;font-weight:700;z-index:200;opacity:0;pointer-events:none;transition:.2s;}
+.toast.show{opacity:1;}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--gn);display:inline-block;}
+.sync-dot.offline{background:var(--rd);}
+</style>
+</head>
+<body>
+
+<!-- صفحه ورود کاربر -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="brand-ic" style="margin:0 auto 14px;width:54px;height:54px;font-size:24px;">م</div>
+    <h2>دفتر طلای مینائی</h2>
+    <p>برای همگام‌سازی لحظه‌ای و ثبت نام شما زیر معاملات، وارد شوید</p>
+    <div class="fg" style="text-align:right">
+      <label class="fl">نام و نام خانوادگی (همکار / اپراتور)</label>
+      <input type="text" id="login-name" class="inp" placeholder="مثلاً: علی مینائی">
+    </div>
+    <div class="fg" style="text-align:right">
+      <label class="fl">رمز ورود تیمی (اختیاری برای امنیت)</label>
+      <input type="password" id="login-pass" class="inp" placeholder="رمز مشترک مجموعه">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">ورود به دفتر مشترک</button>
+  </div>
+</div>
+
+<!-- هدر برنامه -->
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-ic">م</div>
+      <div>
+        <h1>طلای مینائی <span class="sync-dot" id="sync-status" title="وضعیت اتصال"></span></h1>
+        <span id="current-user-label">کاربر: ---</span>
+      </div>
+    </div>
+    <div class="top-acts">
+      <button class="ic-btn" onclick="toggleTheme()" title="تغییر تم">🌓</button>
+      <button class="ic-btn" onclick="logoutUser()" title="تغییر کاربر">🚪</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- تب ۱: ثبت معامله -->
+  <section id="pg-trade" class="page on">
+    <div class="sec-hd"><h2>ثبت معامله جدید</h2><span class="pill" id="live-clock"></span></div>
+    <div class="card">
+      <div class="seg">
+        <button id="btn-buy" class="on-buy" onclick="setSide('buy')">خرید (ورود)</button>
+        <button id="btn-sell" onclick="setSide('sell')">فروش (خروج)</button>
+      </div>
+      <div class="fg">
+        <div class="fl"><span>نوع کالا</span></div>
+        <div class="cats" id="cat-list"></div>
+      </div>
+      <div class="fg" id="fg-qty">
+        <div class="fl"><span id="lbl-qty">وزن (گرم)</span></div>
+        <input type="text" inputmode="decimal" id="inp-qty" class="inp inp-big" placeholder="0.00" oninput="calcLive()">
+      </div>
+      <div class="fg">
+        <div class="fl"><span id="lbl-rate">مظنه مثقال (تومان)</span></div>
+        <input type="text" inputmode="numeric" id="inp-rate" class="inp inp-big" placeholder="0" oninput="fmtInt(this);calcLive()">
+      </div>
+      <div class="grid2">
+        <div class="fg">
+          <div class="fl"><span>طرف حساب</span></div>
+          <input type="text" id="inp-party" class="inp" placeholder="نام مشتری">
+        </div>
+        <div class="fg">
+          <div class="fl"><span>توضیحات</span></div>
+          <input type="text" id="inp-note" class="inp" placeholder="یادداشت">
+        </div>
+      </div>
+      <div class="live-box">
+        <span style="font-size:12px;font-weight:700;color:var(--t2)">مبلغ کل معامله:</span>
+        <span class="v num" id="live-total">۰ تومان</span>
+      </div>
+      <button id="btn-submit" class="btn-primary buy-mode" onclick="submitTx()">ثبت خرید</button>
+    </div>
+  </section>
+
+  <!-- تب ۲: تراز و سود و زیان -->
+  <section id="pg-balance" class="page">
+    <div class="sec-hd"><h2>تراز لحظه‌ای کل مجموعه</h2><span class="pill">همگام‌سازی زنده</span></div>
+    <div class="hero">
+      <div style="font-size:12px;opacity:.85">برآیند سود / زیان کل (تومان)</div>
+      <div class="hero-val num" id="total-pnl">۰</div>
+    </div>
+    <div id="balance-cards"></div>
+  </section>
+
+  <!-- تب ۳: تاریخچه معاملات -->
+  <section id="pg-history" class="page">
+    <div class="sec-hd"><h2>دفتر کل معاملات</h2><span class="pill" id="tx-count">۰ ثبت</span></div>
+    <input type="text" id="search-inp" class="inp" style="margin-bottom:10px;background:var(--sf);" placeholder="جستجو در نام مشتری، کالا یا ثبت‌کننده..." oninput="renderHistory()">
+    <div id="history-list"></div>
+  </section>
+</main>
+
+<!-- ناوبری پایین -->
+<nav class="nav">
+  <div class="nav-in">
+    <button class="on" id="nav-trade" onclick="goPage('trade')">➕<span>ثبت معامله</span></button>
+    <button id="nav-balance" onclick="goPage('balance')">⚖️<span>تراز کل</span></button>
+    <button id="nav-history" onclick="goPage('history')">📜<span>تاریخچه</span></button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+// =========================================================================
+// تنظیمات اتصال Supabase (تکمیل شده با اطلاعات شما)
+// =========================================================================
+const SUPABASE_URL = 'https://jpcoefxzvcshovqlvidp.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_hHM6EUlrlL3NUcpeYU6iRQ_mMYwkEAO';
+
+let supabase = null;
+let isSupabaseReady = false;
+
+try {
+  if (SUPABASE_URL.includes('http')) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    isSupabaseReady = true;
+  }
+} catch (e) { console.error("Supabase init error:", e); }
+
+// کالاها (آب‌شده فردایی، پس‌فردایی و متفرقه در یک گروه تراز)
+const CATS = [
+  { id: 'fardayi', name: 'آب‌شده فردایی', unit: 'گرم', type: 'gold', group: 'melted_group' },
+  { id: 'pasfardayi', name: 'آب‌شده پس‌فردایی', unit: 'گرم', type: 'gold', group: 'melted_group' },
+  { id: 'motafarreghe', name: 'متفرقه', unit: 'گرم', type: 'gold', group: 'melted_group' },
+  { id: 'seke_emami', name: 'سکه امامی', unit: 'عدد', type: 'coin', group: 'seke_emami' },
+  { id: 'nim_seke', name: 'نیم سکه', unit: 'عدد', type: 'coin', group: 'nim_seke' },
+  { id: 'rob_seke', name: 'ربع سکه', unit: 'عدد', type: 'coin', group: 'rob_seke' },
+  { id: 'dollar', name: 'دلار', unit: 'واحد', type: 'curr', group: 'dollar' }
+];
+
+let state = {
+  user: localStorage.getItem('minaei_user') || '',
+  side: 'buy',
+  cat: 'fardayi',
+  txs: []
+};
+
+// مدیریت ورود کاربر
+window.doLogin = function() {
+  const name = document.getElementById('login-name').value.trim();
+  if (!name) return showToast('لطفاً نام خود را وارد کنید');
+  state.user = name;
+  localStorage.setItem('minaei_user', name);
+  checkAuth();
+  showToast('خوش آمدید ' + name);
+};
+
+window.logoutUser = function() {
+  if (confirm('آیا می‌خواهید از حساب کاربری خود خارج شوید؟')) {
+    localStorage.removeItem('minaei_user');
+    state.user = '';
+    checkAuth();
+  }
+};
+
+function checkAuth() {
+  const scr = document.getElementById('login-screen');
+  if (state.user) {
+    scr.style.display = 'none';
+    document.getElementById('current-user-label').textContent = 'کاربر: ' + state.user;
+  } else {
+    scr.style.display = 'flex';
+  }
+}
+
+// دریافت اطلاعات و گوش دادن به تغییرات به صورت زنده (Realtime)
+async function fetchAndListen() {
+  if (!isSupabaseReady) {
+    document.getElementById('sync-status').classList.add('offline');
+    state.txs = JSON.parse(localStorage.getItem('minaei_local_txs') || '[]');
+    renderAll();
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('transactions')
+    .select('*')
+    .order('ts', { ascending: false });
+
+  if (!error && data) {
+    state.txs = data;
+    document.getElementById('sync-status').classList.remove('offline');
+    renderAll();
+  } else {
+    document.getElementById('sync-status').classList.add('offline');
+  }
+
+  // اتصال به کانال Realtime برای همگام‌سازی لحظه‌ای
+  supabase
+    .channel('public:transactions')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, payload => {
+      fetchAndListen();
+    })
+    .subscribe();
+}
+
+// ثبت معامله جدید
+window.submitTx = async function() {
+  const qty = parseFloat(document.getElementById('inp-qty').value.replace(/,/g, ''));
+  const rate = parseFloat(document.getElementById('inp-rate').value.replace(/,/g, ''));
+  const party = document.getElementById('inp-party').value.trim() || 'متفرقه';
+  const note = document.getElementById('inp-note').value.trim();
+
+  if (!qty || qty <= 0 || !rate || rate <= 0) return showToast('مقدار و مظنه را صحیح وارد کنید');
+
+  const catObj = CATS.find(c => c.id === state.cat);
+  const total = catObj.type === 'gold' ? Math.round((qty / 4.3318) * rate) : Math.round(qty * rate);
+
+  const newTx = {
+    side: state.side,
+    cat: state.cat,
+    qty: qty,
+    rate: rate,
+    total: total,
+    party: party,
+    note: note,
+    author: state.user,
+    ts: Date.now(),
+    time_str: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' })
+  };
+
+  if (isSupabaseReady) {
+    const { error } = await supabase.from('transactions').insert([newTx]);
+    if (error) {
+      showToast('خطا در ثبت روی سرور');
+      console.error(error);
+    } else {
+      showToast('ثبت شد و برای همه همگام گردید ✅');
+    }
+  } else {
+    newTx.id = 'loc_' + Date.now();
+    state.txs.unshift(newTx);
+    localStorage.setItem('minaei_local_txs', JSON.stringify(state.txs));
+    renderAll();
+    showToast('ثبت آفلاین انجام شد');
+  }
+
+  document.getElementById('inp-qty').value = '';
+  document.getElementById('inp-party').value = '';
+  document.getElementById('inp-note').value = '';
+  calcLive();
+};
+
+// حذف معامله
+window.delTx = async function(id) {
+  if (!confirm('این معامله برای همه کاربران حذف شود؟')) return;
+  if (isSupabaseReady) {
+    const { error } = await supabase.from('transactions').delete().eq('id', id);
+    if (error) showToast('خطا در حذف معامله');
+    else showToast('معامله حذف شد');
+  } else {
+    state.txs = state.txs.filter(t => t.id !== id);
+    localStorage.setItem('minaei_local_txs', JSON.stringify(state.txs));
+    renderAll();
+  }
+};
+
+// محاسبه و نمایش تراز
+function renderBalance() {
+  const container = document.getElementById('balance-cards');
+  container.innerHTML = '';
+
+  const groups = [
+    {
+      id: 'melted_group',
+      title: 'آب‌شده (فردایی / پس‌فردایی / متفرقه)',
+      unit: 'گرم',
+      isGold: true,
+      subIds: ['fardayi', 'pasfardayi', 'motafarreghe']
+    },
+    { id: 'seke_emami', title: 'سکه امامی', unit: 'عدد', isGold: false, subIds: ['seke_emami'] },
+    { id: 'nim_seke', title: 'نیم سکه', unit: 'عدد', isGold: false, subIds: ['nim_seke'] },
+    { id: 'rob_seke', title: 'ربع سکه', unit: 'عدد', isGold: false, subIds: ['rob_seke'] },
+    { id: 'dollar', title: 'دلار', unit: 'واحد', isGold: false, subIds: ['dollar'] }
+  ];
+
+  let grandPnl = 0;
+
+  groups.forEach(grp => {
+    let buyQty = 0, buyVal = 0, sellQty = 0, sellVal = 0;
+    const subStats = {};
+    grp.subIds.forEach(sid => subStats[sid] = { buy: 0, sell: 0, net: 0 });
+
+    state.txs.forEach(tx => {
+      if (grp.subIds.includes(tx.cat)) {
+        if (tx.side === 'buy') {
+          buyQty += Number(tx.qty);
+          buyVal += Number(tx.total);
+          subStats[tx.cat].buy += Number(tx.qty);
+        } else {
+          sellQty += Number(tx.qty);
+          sellVal += Number(tx.total);
+          subStats[tx.cat].sell += Number(tx.qty);
+        }
+      }
+    });
+
+    const netQty = buyQty - sellQty;
+    const avgBuyRate = buyQty > 0 ? (grp.isGold ? (buyVal / buyQty) * 4.3318 : buyVal / buyQty) : 0;
+    const avgSellRate = sellQty > 0 ? (grp.isGold ? (sellVal / sellQty) * 4.3318 : sellVal / sellQty) : 0;
+
+    const matchedQty = Math.min(buyQty, sellQty);
+    let realizedPnl = 0;
+    if (matchedQty > 0) {
+      const unitBuyCost = buyVal / buyQty;
+      const unitSellRev = sellVal / sellQty;
+      realizedPnl = Math.round((unitSellRev - unitBuyCost) * matchedQty);
+    }
+    grandPnl += realizedPnl;
+
+    let subHtml = '';
+    if (grp.subIds.length > 1) {
+      subHtml = `<div class="sub-list">`;
+      grp.subIds.forEach(sid => {
+        const cInfo = CATS.find(c => c.id === sid);
+        const sNet = subStats[sid].buy - subStats[sid].sell;
+        const sColor = sNet > 0 ? 'var(--gn)' : (sNet < 0 ? 'var(--rd)' : 'var(--t2)');
+        subHtml += `
+          <div class="sub-row">
+            <span style="font-weight:700">${cInfo.name}</span>
+            <span class="num" style="font-weight:800;color:${sColor}">${sNet > 0 ? '+' : ''}${sNet.toFixed(2)} گرم</span>
+          </div>`;
+      });
+      subHtml += `</div>`;
+    }
+
+    const badgeClass = netQty > 0.001 ? 'badge-gn' : (netQty < -0.001 ? 'badge-rd' : 'badge-nt');
+    const badgeText = netQty > 0.001 ? `تراز مثبت (${netQty.toFixed(2)} ${grp.unit})` :
+                      (netQty < -0.001 ? `تراز منفی (${Math.abs(netQty).toFixed(2)} ${grp.unit})` : 'سر به سر (تراز)');
+
+    container.innerHTML += `
+      <div class="bal-card">
+        <div class="bal-top">
+          <span class="bal-name">${grp.title}</span>
+          <span class="badge ${badgeClass}">${badgeText}</span>
+        </div>
+        <div class="bal-grid">
+          <div class="bal-cell"><span>میانگین خرید</span><strong class="num">${Math.round(avgBuyRate).toLocaleString()}</strong></div>
+          <div class="bal-cell"><span>میانگین فروش</span><strong class="num">${Math.round(avgSellRate).toLocaleString()}</strong></div>
+          <div class="bal-cell"><span>سود/زیان بسته</span><strong class="num" style="color:${realizedPnl>=0?'var(--gn)':'var(--rd)'}">${realizedPnl.toLocaleString()}</strong></div>
+        </div>
+        ${subHtml}
+      </div>`;
+  });
+
+  document.getElementById('total-pnl').textContent = grandPnl.toLocaleString() + ' تومان';
+};
+
+// نمایش تاریخچه همراه با نام ثبت‌کننده
+window.renderHistory = function() {
+  const q = document.getElementById('search-inp').value.trim().toLowerCase();
+  const list = document.getElementById('history-list');
+  const filtered = state.txs.filter(t => {
+    const cName = CATS.find(c => c.id === t.cat)?.name || '';
+    return cName.toLowerCase().includes(q) || (t.party || '').toLowerCase().includes(q) || (t.author || '').toLowerCase().includes(q);
+  });
+
+  document.getElementById('tx-count').textContent = filtered.length + ' ثبت';
+  list.innerHTML = filtered.map(t => {
+    const cObj = CATS.find(c => c.id === t.cat);
+    return `
+      <div class="tx">
+        <div class="tx-top">
+          <div>
+            <span class="tx-side ${t.side === 'buy' ? 'b' : 's'}">${t.side === 'buy' ? 'خرید' : 'فروش'}</span>
+            <strong style="margin-right:6px;font-size:14px">${cObj ? cObj.name : t.cat}</strong>
+            <span style="font-size:12px;color:var(--t2)">(${t.party})</span>
+          </div>
+          <strong class="num" style="font-size:14px">${Number(t.total).toLocaleString()} ت</strong>
+        </div>
+        <div style="margin-top:6px;font-size:12.5px;color:var(--t2);display:flex;justify-content:space-between">
+          <span>مقدار: <b class="num" style="color:var(--t1)">${t.qty}</b> ${cObj?.unit || ''}</span>
+          <span>مظنه: <b class="num" style="color:var(--t1)">${Number(t.rate).toLocaleString()}</b></span>
+        </div>
+        ${t.note ? `<div style="font-size:11.5px;color:var(--ac);margin-top:4px">یادداشت: ${t.note}</div>` : ''}
+        <div class="tx-meta">
+          <span class="author-tag">✍️ ثبت توسط: ${t.author || 'نامشخص'}</span>
+          <div>
+            <span style="margin-left:8px">${t.time_str || ''}</span>
+            <button onclick="delTx('${t.id}')" style="color:var(--rd);font-weight:700">حذف</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+};
+
+function renderAll() {
+  renderBalance();
+  renderHistory();
+}
+
+function initCats() {
+  const el = document.getElementById('cat-list');
+  el.innerHTML = CATS.map(c => `<button class="cat ${c.id === state.cat ? 'on' : ''}" onclick="setCat('${c.id}')">${c.name}</button>`).join('');
+}
+
+window.setCat = function(id) {
+  state.cat = id;
+  initCats();
+  const c = CATS.find(x => x.id === id);
+  document.getElementById('lbl-qty').textContent = c.type === 'gold' ? 'وزن (گرم)' : 'تعداد (' + c.unit + ')';
+  document.getElementById('lbl-rate').textContent = c.type === 'gold' ? 'مظنه مثقال (تومان)' : 'فی واحد (تومان)';
+  calcLive();
+};
+
+window.setSide = function(s) {
+  state.side = s;
+  document.getElementById('btn-buy').className = s === 'buy' ? 'on-buy' : '';
+  document.getElementById('btn-sell').className = s === 'sell' ? 'on-sell' : '';
+  const sub = document.getElementById('btn-submit');
+  sub.className = 'btn-primary ' + (s === 'buy' ? 'buy-mode' : 'sell-mode');
+  sub.textContent = s === 'buy' ? 'ثبت خرید' : 'ثبت فروش';
+};
+
+window.calcLive = function() {
+  const qty = parseFloat(document.getElementById('inp-qty').value.replace(/,/g, '')) || 0;
+  const rate = parseFloat(document.getElementById('inp-rate').value.replace(/,/g, '')) || 0;
+  const c = CATS.find(x => x.id === state.cat);
+  const tot = c.type === 'gold' ? Math.round((qty / 4.3318) * rate) : Math.round(qty * rate);
+  document.getElementById('live-total').textContent = tot.toLocaleString() + ' تومان';
+};
+
+window.fmtInt = function(el) {
+  const v = el.value.replace(/\D/g, '');
+  el.value = v ? parseInt(v, 10).toLocaleString('en-US') : '';
+};
+
+window.goPage = function(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.nav button').forEach(x => x.classList.remove('on'));
+  document.getElementById('pg-' + p).classList.add('on');
+  document.getElementById('nav-' + p).classList.add('on');
+};
+
+window.toggleTheme = function() {
+  document.documentElement.classList.toggle('dark');
+};
+
+function showToast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+checkAuth();
+initCats();
+fetchAndListen();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
